@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-11 11:16:13
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-11 11:16:27
-import numpy as np 
+import numpy as np
 import torch.nn as nn
 
 def weights_init_kaiming(m):

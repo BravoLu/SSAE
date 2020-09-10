@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-12 17:33:16
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-12 17:33:30
 
 import torch.nn as nn
 import torch.optim as optim
@@ -32,11 +28,11 @@ def get_model(class_weights=None):
     for n, p in model.named_parameters():
         if n in trainable_params:
             p.requires_grad = True
-    
+
     for m in model.features.denseblock4.modules():
         if isinstance(m, nn.ReLU):
             m.inplace = False
-    
+
     # create different parameter groups
     classifier_weights = [model.classifier.weight]
     classifier_biases = [model.classifier.bias]
@@ -57,7 +53,7 @@ def get_model(class_weights=None):
     classifier_lr = 1e-2
     features_lr = 1e-2
     # but they are not actually used (because lr_scheduler is used)
-    
+
     params = [
         {'params': classifier_weights, 'lr': classifier_lr, 'weight_decay': 1e-4},
         {'params': classifier_biases, 'lr': classifier_lr},
@@ -66,7 +62,7 @@ def get_model(class_weights=None):
         {'params': features_bn_biases, 'lr': features_lr}
     ]
     optimizer = optim.SGD(params, momentum=0.9, nesterov=True)
-            
+
     # loss function
     criterion = nn.CrossEntropyLoss(weight=class_weights).cuda()
     # move the model to gpu

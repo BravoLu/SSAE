@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-15 13:58:26
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-25 10:13:23
 
 import copy
 
@@ -45,7 +41,7 @@ class MGN(nn.Module):
         self.p1 = nn.Sequential(copy.deepcopy(res_conv4), copy.deepcopy(res_g_conv5))
         self.p2 = nn.Sequential(copy.deepcopy(res_conv4), copy.deepcopy(res_p_conv5))
         self.p3 = nn.Sequential(copy.deepcopy(res_conv4), copy.deepcopy(res_p_conv5))
-        
+
         # if args.pool == 'max':
         #     pool2d = nn.MaxPool2d
         # elif args.pool == 'avg':
@@ -131,7 +127,7 @@ class MGN(nn.Module):
         z0_p3 = zp3[:, :, 0:1, :]
         z1_p3 = zp3[:, :, 1:2, :]
         z2_p3 = zp3[:, :, 2:3, :]
-        
+
         fg_p1 = self.reduction_0(zg_p1).squeeze(dim=3).squeeze(dim=2)
         fg_p2 = self.reduction_1(zg_p2).squeeze(dim=3).squeeze(dim=2)
         fg_p3 = self.reduction_2(zg_p3).squeeze(dim=3).squeeze(dim=2)
@@ -150,12 +146,12 @@ class MGN(nn.Module):
         predict = torch.cat([fg_p1, fg_p2, fg_p3, f0_p2, f1_p2, f0_p3, f1_p3, f2_p3], dim=1)
 
         if not self.training:
-            return predict 
+            return predict
 
         l_p1 = self.fc_id_2048_0(fg_p1)
         l_p2 = self.fc_id_2048_1(fg_p2)
         l_p3 = self.fc_id_2048_2(fg_p3)
-        
+
         l0_p2 = self.fc_id_256_1_0(f0_p2)
         l1_p2 = self.fc_id_256_1_1(f1_p2)
         l0_p3 = self.fc_id_256_2_0(f0_p3)

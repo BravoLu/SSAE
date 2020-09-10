@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-10 14:36:37
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-24 10:11:37
 
 import argparse
 import os

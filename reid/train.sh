@@ -1,7 +1,3 @@
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-20 23:50:31
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-23 11:01:20
 #python attack_baseline.py --target mudeep --ckpt ../targets/reid/mudeep_market1501.pth --lr 1e-4 --gpu 0,2
 #python attack_baseline.py --target ide --net FCN16s --ckpt ../targets/reid/ide_market1501.pth --lr 1e-4 --gpu 1,6
 #python attack_baseline.py --target spgan --ckpt ../targets/reid/spgan_market1501.pth --lr 1e-4 --gpu 3
@@ -14,6 +10,6 @@
 target='ide'
 dataset=CUHK03
 gpu=2,3
-dir='/raid/home/bravolu/data'
+dir=''
 echo python train.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
 python train.py --dir ${dir} --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 

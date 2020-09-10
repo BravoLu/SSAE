@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-15 14:24:29
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-15 14:47:34
 import torch.nn.functional as F
 import pyrtools as pt
 import numpy as np
@@ -68,7 +64,7 @@ class IW_SSIM():
         lpo = pt.pyramids.LaplacianPyramid(imgo, height=5)
         lpd = pt.pyramids.LaplacianPyramid(imgd, height=5)
         for scale in range(1, self.Nsc + 1):
-            imgopr[scale] = torch.from_numpy(lpo.pyr_coeffs[(scale-1, 0)]).unsqueeze(0).unsqueeze(0).type(self.samplet.type()) 
+            imgopr[scale] = torch.from_numpy(lpo.pyr_coeffs[(scale-1, 0)]).unsqueeze(0).unsqueeze(0).type(self.samplet.type())
             imgdpr[scale] = torch.from_numpy(lpd.pyr_coeffs[(scale-1, 0)]).unsqueeze(0).unsqueeze(0).type(self.samplet.type())
 
         return imgopr, imgdpr
@@ -146,7 +142,7 @@ class IW_SSIM():
             ss_x[ss_x < tol] = 0
             g[ss_y < tol] = 0
             vv[ss_y < tol] = 0
-            
+
             # Prepare parent band
             aux = imgo
             _, _, Nsy, Nsx = aux.shape
@@ -168,7 +164,7 @@ class IW_SSIM():
             block = torch.tensor([win.shape[2], win.shape[3]])
             if self.use_cuda:
                 block = block.cuda()
-            
+
             # Group neighboring pixels
             nblv = nv-block[0]+1
             nblh = nh-block[1]+1
@@ -199,9 +195,9 @@ class IW_SSIM():
             eig_values = eig_values.type(self.samplet.type())
             H = H.type(self.samplet.type())
             if self.use_double:
-                L = torch.diag(eig_values[:, 0] * (eig_values[:, 0] > 0).double()) * torch.sum(eig_values) / ((torch.sum(eig_values[:,0] * (eig_values[:, 0] > 0).double())) + (torch.sum(eig_values[:, 0] * (eig_values[:, 0] > 0).double())==0)) 
+                L = torch.diag(eig_values[:, 0] * (eig_values[:, 0] > 0).double()) * torch.sum(eig_values) / ((torch.sum(eig_values[:,0] * (eig_values[:, 0] > 0).double())) + (torch.sum(eig_values[:, 0] * (eig_values[:, 0] > 0).double())==0))
             else:
-                L = torch.diag(eig_values[:, 0] * (eig_values[:, 0] > 0).float()) * torch.sum(eig_values) / ((torch.sum(eig_values[:,0] * (eig_values[:, 0] > 0).float())) + (torch.sum(eig_values[:, 0] * (eig_values[:, 0] > 0).float())==0)) 
+                L = torch.diag(eig_values[:, 0] * (eig_values[:, 0] > 0).float()) * torch.sum(eig_values) / ((torch.sum(eig_values[:,0] * (eig_values[:, 0] > 0).float())) + (torch.sum(eig_values[:, 0] * (eig_values[:, 0] > 0).float())==0))
             C_u = torch.mm(torch.mm(H, L), torch.transpose(H, 0, 1))
             C_u_inv = torch.inverse(C_u)
             ss = (torch.mm(Y, C_u_inv))*Y / N.type(self.samplet.type())
@@ -257,8 +253,8 @@ class IW_SSIM():
 
 def iw_ssim(img1, img2):
 
-    tmp = IW_SSIM(iw_flag=True, Nsc=5, blSzX=3, 
-                    blSzY=3, parent=True, sigma_nsq=0.4, 
+    tmp = IW_SSIM(iw_flag=True, Nsc=5, blSzX=3,
+                    blSzY=3, parent=True, sigma_nsq=0.4,
                     use_cuda=False, use_double=False)
 
     iw_score = tmp.test(rgb2gray(img1), rgb2gray(img2))

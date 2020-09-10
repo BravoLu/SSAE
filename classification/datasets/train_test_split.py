@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-11 16:56:44
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-11 17:18:07
-
-import random 
+import random
 import os
-import json 
+import json
 
 DATA_DIR = '/user/lintao/shaohao/adversarial-attack-by-gan/datas/256_ObjectCategories'
 
@@ -21,15 +16,15 @@ for dir in os.listdir(DATA_DIR):
             imgs.append((os.path.join(DATA_DIR, dir, img), category))
 
     random.shuffle(imgs)
-    num = len(imgs)   
+    num = len(imgs)
     for t in imgs[:int(num*0.8)]:
-        path, cat = t 
+        path, cat = t
         train.append({
             'path':path,
             'category':cat-1
             })
     for t in imgs[int(num*0.8):]:
-        path, cat = t 
+        path, cat = t
         test.append({
             'path':path,
             'category':cat-1

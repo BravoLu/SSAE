@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-22 16:11:08
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-22 17:10:49
 import os.path as osp
 import torch
 import numpy as np
@@ -171,10 +167,10 @@ class FCN16s(nn.Module):
 
 
         mask = self.upscore2_2(feats_mask)
-        upscore2_2 = mask 
+        upscore2_2 = mask
         mask = self.score_pool4_2(pool4)
         mask = mask[:, :, 5:5 + upscore2_2.size()[2], 5:5 + upscore2_2.size()[3]]
-        score_pool4c_2 = mask 
+        score_pool4c_2 = mask
         mask = upscore2_2 + score_pool4c_2
         mask = self.upscore16_2(mask)
         mask = mask[:, :, 27:27+x.size()[2], 27:27+x.size()[3]].contiguous()

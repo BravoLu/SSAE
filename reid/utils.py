@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-11 11:20:18
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-22 16:53:36
 '''
     reference:
 '''

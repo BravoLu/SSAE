@@ -17,8 +17,9 @@ image_nc=3
 batch_size = 128
 gen_input_nc = image_nc
 
-
-
+parser = argparse.ArgumentParser('AdvGAN')
+parser.add_argument('--dir', type=str, defualt='')
+args = parser.parse_agrs()
 
 model_name = 'googlenet'
 data_name = 'imagenette'
@@ -45,9 +46,9 @@ pretrained_G.eval()
 #cfg = get_opts('imagenette')
 cfg = get_opts(data_name)
 if data_name == 'imagenette':
-    testset = ImageFolder('/raid/home/bravolu/data/imagenette2/val', transform=cfg['transform_test'])
+    testset = ImageFolder(os.path.join(args.dir, 'imagenette2/val'), transform=cfg['transform_test'])
 else:
-    testset = torchvision.datasets.CIFAR10(root='../data/cifar10', train=False, transform=cfg['transform_train'], download=True)
+    testset = torchvision.datasets.CIFAR10(root=os.path.join(args.dir, 'cifar10'), train=False, transform=cfg['transform_train'], download=True)
 
 test_dataloader = DataLoader(
         testset,

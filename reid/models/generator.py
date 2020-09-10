@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-11 11:17:50
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-24 16:24:11
 import torch
 import torch.nn as nn
 from torch.nn import Parameter

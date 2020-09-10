@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-17 16:50:14
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-30 18:36:16
 
 from __future__ import absolute_import
 
 from torchvision.transforms import *
-import torchvision.transforms as T 
+import torchvision.transforms as T
 from PIL import Image
 import random
 import numpy as np
@@ -137,7 +133,7 @@ def get_opts(name):
     base_opt['transform_train'] = T.Compose([Random2DTranslation(256, 128), T.RandomHorizontalFlip(), T.ToTensor(), T.Normalize(mean=Imagenet_mean, std=Imagenet_stddev)])
     base_opt['transform_test'] = T.Compose([T.Resize((256, 128)), T.ToTensor(), T.Normalize(mean=Imagenet_mean, std=Imagenet_stddev)])
 
-  # 2.   
+  # 2.
   elif name == 'aligned':
     base_opt['transform_train'] = T.Compose([Random2DTranslation(256, 128), T.RandomHorizontalFlip(), T.ToTensor(), T.Normalize(mean=Imagenet_mean, std=Imagenet_stddev)])
     base_opt['transform_test'] = T.Compose([T.Resize((256, 128)), T.ToTensor(), T.Normalize(mean=Imagenet_mean, std=Imagenet_stddev)])

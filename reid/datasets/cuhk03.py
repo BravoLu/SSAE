@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-22 09:45:11
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-22 14:27:48
 import json
 import os.path as osp
 from scipy.io import loadmat
@@ -44,7 +40,7 @@ class CUHK03(object):
         cuhk03_labeled (bool): whether to load labeled images; if false, detected images are loaded (default: False)
     """
 
-    def __init__(self, root='/raid/home/bravolu/Adversarial-Attack-By-GAN/data', split_id=0, cuhk03_labeled=False, cuhk03_classic_split=False, **kwargs):
+    def __init__(self, root='data', split_id=0, cuhk03_labeled=False, cuhk03_classic_split=False, **kwargs):
         self.dataset_dir = root
         self.data_dir = osp.join(self.dataset_dir, 'cuhk03_release')
         self.raw_mat_path = osp.join(self.data_dir, 'cuhk-03.mat')

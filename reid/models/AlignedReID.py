@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-16 17:46:13
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-17 17:34:37
 
 from __future__ import absolute_import
 
@@ -56,11 +52,11 @@ class ResNet50(nn.Module):
     if self.loss == {'softmax'}:
       return [y]
     elif self.loss == {'metric'}:
-      if self.aligned: 
+      if self.aligned:
         return [f, lf]
       return [f]
     elif self.loss == {'softmax', 'metric'}:
-      if self.aligned: 
+      if self.aligned:
         return [y, f, lf]
       return [y, f]
     else:

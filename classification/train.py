@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-# @Author: Lu Shaohao(Bravo)
-# @Date:   2020-06-10 14:36:37
-# @Last Modified by:   Lu Shaohao(Bravo)
-# @Last Modified time: 2020-06-29 17:14:02
-
 import argparse
 import os
 import numpy as np
