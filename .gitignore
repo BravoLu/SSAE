@@ -5,3 +5,4 @@ data/*
 targets/*
 classification/checkpoint/*
 vis/*
+visualization/**/*.pth

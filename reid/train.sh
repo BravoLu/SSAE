@@ -15,5 +15,5 @@ target='ide'
 dataset=CUHK03
 gpu=2,3
 dir='/raid/home/bravolu/data'
-echo python attack_baseline.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
+echo python train.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
 python train.py --dir ${dir} --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
