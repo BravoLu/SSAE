@@ -5,3 +5,5 @@ data/*
 targets/*
 classification/checkpoint/*
 vis/*
+classification/target/*
+reid/target/*

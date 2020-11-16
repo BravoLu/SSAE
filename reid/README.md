@@ -7,6 +7,14 @@
 *  Market1501
 * cuhk03
 
+### target model 
+1. mkdir the directory
+```shell
+    mkdir target
+```
+
+2. download the [target model files](https://pan.baidu.com/s/18lVuCO2knotUzD8oNUI3fg)(password:3914) into ./target directory.
+
 ## Train 
 
 * Train the baseline for 40 epochs first.

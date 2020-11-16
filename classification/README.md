@@ -7,6 +7,16 @@
 *  cifar10
 * [imagenette]( https://github.com/fastai/fastai )
 
+
+### target model
+
+1. mkdir the directory.
+```shell
+    mkdir target
+```
+2. download the [target model files](https://pan.baidu.com/s/1M8xo6McuWFUPAEparhBH-A)(password:3914) into ./target directory.
+
+
 ## Train 
 
 * Train the baseline for 40 epochs first.
