@@ -103,10 +103,11 @@ class ResNet(nn.Module):
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
         return feat,out
+        #return out
 
 
-def ResNet18():
-    return ResNet(BasicBlock, [2, 2, 2, 2])
+def ResNet18(num_classes):
+    return ResNet(BasicBlock, [2, 2, 2, 2], num_classes=num_classes)
 
 
 def ResNet34():

@@ -75,8 +75,8 @@ class MobileNetV2(nn.Module):
         out = self.gap(out)
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        return feat, out
-
+        #return feat, out
+        return out
 
 def test():
     net = MobileNetV2()

@@ -9,27 +9,31 @@ from torchvision.utils import save_image
 import models
 from models import *
 from transforms import get_opts
-from metrics import *
-from utils import *
-
+from tqdm import tqdm
+import os
 use_cuda=True
 image_nc=3
 batch_size = 128
 gen_input_nc = image_nc
 
 parser = argparse.ArgumentParser('AdvGAN')
-parser.add_argument('--dir', type=str, defualt='')
-args = parser.parse_agrs()
+parser.add_argument('--dir', type=str, default='')
+args = parser.parse_args()
 
-model_name = 'googlenet'
+#model_name = 'resnet'
+#model_name = 'googlenet'
+#model_name = 'efficientnet'
+#model_name = 'mobilenet'
+model_name = 'densenet'
 data_name = 'imagenette'
+
 #Define what device we are using
 print("CUDA Available: ",torch.cuda.is_available())
 device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
 #load the pretrained model
 #targeted_model = init_model('resnet', '../targets/classification/imagenette_resnet.pth')
-targeted_model = init_model(model_name, '../targets/classification/{}_{}.pth'.format(data_name, model_name))
+targeted_model = init_model(model_name, '../classification/target/{}_{}.pth'.format(data_name, model_name))
 #targeted_model = init_model('resnet', '../targets/classification/cifar10_resnet.pth')
 targeted_model = targeted_model.cuda()
 targeted_model.eval()
@@ -38,8 +42,8 @@ targeted_model.eval()
 #pretrained_generator_path = './models/netG_epoch_20.pth'
 pretrained_generator_path = '../logs/classification/{}_{}_advGAN/netG_epoch_60.pth'.format(data_name, model_name)
 #pretrained_generator_path = '../logs/classification/cifar10_resnet_advGAN/netG_epoch_20.pth'
-pretrained_G = AdvGAN_models.Generator(gen_input_nc, image_nc).to(device)
-pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
+pretrained_G = models.Generator(gen_input_nc, image_nc).to(device)
+#pretrained_G.load_state_dict(torch.load(pretrained_generator_path))
 pretrained_G.eval()
 
 # test adversarial examples in MNIST training dataset
@@ -52,7 +56,7 @@ else:
 
 test_dataloader = DataLoader(
         testset,
-        batch_size=16,
+        batch_size=1,
         shuffle=False,
         num_workers=4,
         pin_memory=True
@@ -61,7 +65,7 @@ test_dataloader = DataLoader(
 num_correct = 0
 adv_imgs = []
 raw_imgs = []
-for i, data in enumerate(test_dataloader, 0):
+for i, data in tqdm(enumerate(test_dataloader, 0)):
     test_img, test_label = data
     test_img, test_label = test_img.to(device), test_label.to(device)
     with torch.no_grad():
@@ -79,10 +83,10 @@ for i, data in enumerate(test_dataloader, 0):
     raw_imgs.append(test_img.cpu())
     with torch.no_grad():
         pred_lab = torch.argmax(targeted_model(adv_img)[1],1)
-    tensor2img(adv_img, mean=cfg['mean'], std=cfg['std'])
-    tensor2img(test_img, mean=cfg['mean'], std=cfg['std'])
-    if i == 1:
-        save_image(adv_img[:8], 'test.png')
+    #tensor2img(adv_img, mean=cfg['mean'], std=cfg['std'])
+    #tensor2img(test_img, mean=cfg['mean'], std=cfg['std'])
+    #if i == 1:
+    #    save_image(adv_img[:8], 'test.png')
     num_correct += torch.sum(pred_lab==test_label,0)
 
 raw_imgs = torch.cat(raw_imgs, dim=0)

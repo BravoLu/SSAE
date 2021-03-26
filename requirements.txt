@@ -5,3 +5,4 @@ tqdm
 scikit-image
 pyrtools
 regex
+advertorch

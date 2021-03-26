@@ -105,7 +105,7 @@ class Block(nn.Module):
 
 
 class EfficientNet(nn.Module):
-    def __init__(self, cfg, num_classes=10):
+    def __init__(self, cfg, num_classes=100):
         super(EfficientNet, self).__init__()
         self.cfg = cfg
         self.conv1 = nn.Conv2d(3,
@@ -146,9 +146,9 @@ class EfficientNet(nn.Module):
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
         return feat,out
+        #return out
 
-
-def EfficientNetB0():
+def EfficientNetB0(num_classes):
     cfg = {
         'num_blocks': [1, 2, 2, 3, 3, 4, 1],
         'expansion': [1, 6, 6, 6, 6, 6, 6],
@@ -158,7 +158,7 @@ def EfficientNetB0():
         'dropout_rate': 0.2,
         'drop_connect_rate': 0.2,
     }
-    return EfficientNet(cfg)
+    return EfficientNet(cfg, num_classes=num_classes)
 
 
 def test():

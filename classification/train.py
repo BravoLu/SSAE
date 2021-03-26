@@ -30,7 +30,7 @@ alpha = 0.0001
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Adversarial Attack In Classification Task.')
-    parser.add_argument('--dataset', type=str, default='cifar10', choices=('cifar10', 'imagenette'))
+    parser.add_argument('--dataset', type=str, default='cifar10', choices=('cifar10', 'imagenette', 'cifar100'))
     parser.add_argument('--target', type=str, default='resnet', choices=('efficientnet', 'densenet', 'resnet', 'vgg', 'googlenet', 'mobilenet'))
     parser.add_argument('--ckpt', type=str, default='../targets/classification/Baseline_cifar10.pth')
     parser.add_argument('--gpu', type=str, default='3,7')
@@ -42,15 +42,18 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     mode = 'saliency' if args.saliency else 'baseline'
-    logs = '../logs/classification/%s_%s_%s'%(args.dataset, args.target, mode)
+    logs = '../logs/classification/%s_%s_%s_v2'%(args.dataset, args.target, mode)
     mkdir_if_missing(logs)
     logger = Logger(log_dir=logs)
     # dataset = Market1501()
     cfg = get_opts(args.dataset)
 
     if args.dataset == "cifar10":
-        trainset = torchvision.datasets.CIFAR10(root=os.path.join(args.dir,'data/cifar10'), train=True, transform=cfg['transform_train'], download=True)
-        testset = torchvision.datasets.CIFAR10(root=os.path.join(args.dir, 'data/cifar10'), train=False, transform=cfg['transform_test'], download=True)
+        trainset = torchvision.datasets.CIFAR10(root=args.dir, train=True, transform=cfg['transform_train'], download=True)
+        testset = torchvision.datasets.CIFAR10(root=args.dir, train=False, transform=cfg['transform_test'], download=True)
+    elif args.dataset == 'cifar100':
+        trainset = torchvision.datasets.CIFAR100(root=args.dir, train=True, transform=cfg['transform_train'], download=True)
+        testset = torchvision.datasets.CIFAR100(root=args.dir, train=False, transform=cfg['transform_test'], download=True)
     elif args.dataset == 'imagenette':
         trainset = ImageFolder(os.path.join(args.dir, 'imagenette2/train'), transform=cfg['transform_train'])
         testset = ImageFolder(os.path.join(args.dir, 'imagenette2/val'), transform=cfg['transform_test'])
@@ -82,9 +85,10 @@ if __name__ == '__main__':
             print('You must train the symmetric saliency-based auto-encoder without saliency first')
     num_classes = {
         'imagenette': 10,
-        'cifar10': 10
+        'cifar10': 10,
+        'cifar100': 100
     }
-    target_model = init_model(args.target, args.ckpt)
+    target_model = init_model(args.target, args.ckpt, num_classes=num_classes[args.dataset])
     target_model = nn.DataParallel(target_model).to(device)
 
     print_information(logger, args)
@@ -128,7 +132,7 @@ if __name__ == '__main__':
             if args.saliency:
                 norm_loss = mse_loss(raw_norms, adv_norms)
                 frobenius_loss = torch.norm(saliency_map, dim=(1,2)).sum()
-                loss += alpha * (norm_loss + frobenius_loss)
+                #loss += alpha * (norm_loss + frobenius_loss)
                 if torch.isnan(frobenius_loss):
                     print("there are nans in frobenius loss")
                     break

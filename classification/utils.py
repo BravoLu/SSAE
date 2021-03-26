@@ -15,7 +15,7 @@ from torch.distributions import laplace
 from torch.distributions import uniform
 import numpy as np
 from torchvision.utils import save_image
-
+from tqdm import tqdm
 
 def mkdir_if_missing(dir_path):
     try:
@@ -314,7 +314,7 @@ def evaluate(test_loader, model ,generator, logs, delta, use_saliency_map=False,
         generator.eval()
     correct, total = 0, 0
     with torch.no_grad():
-        for batch_idx, (inputs, targets) in enumerate(test_loader):
+        for batch_idx, (inputs, targets) in tqdm(enumerate(test_loader)):
             raw_imgs, targets = inputs.cuda(), targets.cuda()
             if generator:
                 perturbations, saliency_map = generator(inputs)
@@ -329,20 +329,21 @@ def evaluate(test_loader, model ,generator, logs, delta, use_saliency_map=False,
             all_adv_imgs.append(adv_imgs.cpu())
 
             _, predicts = model(adv_imgs)
+            #predicts = model(adv_imgs)
             _, predicts = predicts.max(1)
             total += targets.size(0)
             correct += predicts.eq(targets).sum().item()
 
-            if batch_idx == 1:
+            if batch_idx % 200 == 0 :
                 if generator:
-                    save_image(saliency_map[:8], '%s/mask.jpg'%logs)
+                    save_image(saliency_map[:1], '%s/mask.jpg'%logs)
                     tensor2img(perturbations, mean=mean, std=std)
-                    save_image(perturbations[:8], '%s/pertubations.jpg'%logs)
+                    save_image(perturbations[:1], '%s/pertubations.jpg'%logs)
 
                 tensor2img(adv_imgs, mean=mean, std=std)
                 tensor2img(raw_imgs, mean=mean, std=std)
-                save_image(adv_imgs[:8], '%s/adv.png'%logs)
-                save_image(raw_imgs[:8], '%s/raw.png'%logs)
+                save_image(adv_imgs[:1], '%s/adv_%d.png'%(logs, batch_idx))
+                save_image(raw_imgs[:1], '%s/raw_%d.png'%(logs, batch_idx))
 
     all_raw_imgs = torch.cat(all_raw_imgs, dim=0)
     all_adv_imgs = torch.cat(all_adv_imgs, dim=0)

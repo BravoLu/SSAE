@@ -82,7 +82,8 @@ class DenseNet(nn.Module):
         out = self.gap(F.relu(self.bn(out)))
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        return feat, out
+        #return feat, out
+        return out
 
 def DenseNet121():
     return DenseNet(Bottleneck, [6,12,24,16], growth_rate=32)

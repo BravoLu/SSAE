@@ -19,9 +19,10 @@
 ## Get Started
 ### [Adversarial Attack for Image Classification](classification/)
 
-![pic](images/ic.jpg)
-
 ### [Adversarial Attack for Image Retrieval](reid/)
 
-![pic](images/ir.jpg)
+## Demo
 
+* We deploy a resnet18 model on http://124.156.185.206:9999/
+
+![pic](images/demo.jpg)
