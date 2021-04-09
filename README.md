@@ -15,4 +15,4 @@
 
 ## Demo
 
-* We deploy a resnet18 model on http://124.156.185.206:9999/
+* We deploy a resnet18 model on http://124.156.185.206:9999/, you can use the images in directory ./images/original_examples/ for testing.
