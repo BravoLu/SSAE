@@ -21,8 +21,10 @@ parser = argparse.ArgumentParser(description="AdvGAN Adversarial Attack")
 parser.add_argument('--model', default='resnet', type=str)
 parser.add_argument('--dataset', default='cifar10', type=str)
 parser.add_argument('--dir', default='', type=str)
+parser.add_argument('--gpu', default='0', type=str)
 
 args = parser.parse_args()
+os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 model_name =  args.model
 data_name = args.dataset
 data_dir = args.dir
@@ -32,7 +34,7 @@ print("model_name: {}".format(model_name))
 print("CUDA Available: ",torch.cuda.is_available())
 device = torch.device("cuda" if (use_cuda and torch.cuda.is_available()) else "cpu")
 
-targeted_model = init_model(model_name, '../targets/classification/{}_{}.pth'.format(data_name, model_name))
+targeted_model = init_model(model_name, '../classification/target/{}_{}.pth'.format(data_name, model_name))
 models_path = '../logs/classification/{}_{}_advGAN/'.format(data_name, model_name)
 if not os.path.exists(models_path):
     os.makedirs(models_path)

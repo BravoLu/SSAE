@@ -6,10 +6,12 @@
 #python attack_baseline.py --target hhl --dataset CUHK03 --ckpt ../targets/reid/hhl_cuhk03.pth --lr 1e-4 --gpu 6
 #target='sbl'
 #target='mgn'
-#dataset='Market1501'
-target='ide'
-dataset=CUHK03
+dataset='Market1501'
+target='aligned'
+# dataset=CUHK03
 gpu=2,3
-dir=''
-echo python train.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
-python train.py --dir ${dir} --target ${target} --dataset ${dataset} --ckpt ../targets/reid/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
+dir='/user/lintao/shaohao/data/'
+echo python train.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ./targets/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
+python train.py --dir ${dir} --target ${target} --dataset ${dataset} --ckpt ./targets/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} --saliency 
+#echo python train.py --dir ${dir}  --target ${target} --dataset ${dataset} --ckpt ./targets/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu} 
+#python train.py --dir ${dir} --target ${target} --dataset ${dataset} --ckpt ./targets/${target}_${dataset}.pth --lr 1e-4 --gpu ${gpu}  

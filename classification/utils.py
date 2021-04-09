@@ -318,6 +318,7 @@ def evaluate(test_loader, model ,generator, logs, delta, use_saliency_map=False,
             raw_imgs, targets = inputs.cuda(), targets.cuda()
             if generator:
                 perturbations, saliency_map = generator(inputs)
+                perturbations_with_saliency = perturbations * saliency_map
                 if use_saliency_map:
                     adv_imgs =  raw_imgs + batch_clamp(delta, perturbations) * saliency_map
                 else:
@@ -334,16 +335,19 @@ def evaluate(test_loader, model ,generator, logs, delta, use_saliency_map=False,
             total += targets.size(0)
             correct += predicts.eq(targets).sum().item()
 
-            if batch_idx % 200 == 0 :
+
+            if batch_idx < 10 :
                 if generator:
-                    save_image(saliency_map[:1], '%s/mask.jpg'%logs)
+                    save_image(saliency_map, '%s/cls_mask_%d.jpg'%(logs, batch_idx))
                     tensor2img(perturbations, mean=mean, std=std)
-                    save_image(perturbations[:1], '%s/pertubations.jpg'%logs)
+                    save_image(perturbations, '%s/cls_pertubations_%d.jpg'%(logs, batch_idx))
+                    tensor2img(perturbations_with_saliency, mean=mean, std=std)
+                    save_image(perturbations_with_saliency, '%s/cls_with_saliency_%d.jpg'%(logs, batch_idx))
 
                 tensor2img(adv_imgs, mean=mean, std=std)
                 tensor2img(raw_imgs, mean=mean, std=std)
-                save_image(adv_imgs[:1], '%s/adv_%d.png'%(logs, batch_idx))
-                save_image(raw_imgs[:1], '%s/raw_%d.png'%(logs, batch_idx))
+                save_image(adv_imgs, '%s/cls_adv_%d.png'%(logs, batch_idx))
+                save_image(raw_imgs, '%s/cls_raw_%d.png'%(logs, batch_idx))
 
     all_raw_imgs = torch.cat(all_raw_imgs, dim=0)
     all_adv_imgs = torch.cat(all_adv_imgs, dim=0)

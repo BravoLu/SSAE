@@ -1,13 +1,5 @@
 # Symmetric Saliency-based Auto-Encoder for Adversarial Attack.
 
-
-
-![pic](images/framework.jpg)
-
-
-
-
-
 ## Installation
 
 ```
@@ -24,5 +16,3 @@
 ## Demo
 
 * We deploy a resnet18 model on http://124.156.185.206:9999/
-
-![pic](images/demo.jpg)

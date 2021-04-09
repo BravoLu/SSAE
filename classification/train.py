@@ -42,7 +42,7 @@ if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     mode = 'saliency' if args.saliency else 'baseline'
-    logs = '../logs/classification/%s_%s_%s_v2'%(args.dataset, args.target, mode)
+    logs = '../logs/classification/%s_%s_%s'%(args.dataset, args.target, mode)
     mkdir_if_missing(logs)
     logger = Logger(log_dir=logs)
     # dataset = Market1501()
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     train_loader = DataLoader(
         trainset,
-        batch_size=8,
+        batch_size=16,
         shuffle=True,
         num_workers=4,
         pin_memory=True
@@ -79,10 +79,13 @@ if __name__ == '__main__':
     generator = nn.DataParallel(generator)
     if args.saliency:
         EPOCHS = 150
-        try:
-            generator.load_state_dict(torch.load('../logs/classification/%s_%s_Baseline/Best_G.pth'%(args.dataset, args.target)))
-        except:
-            print('You must train the symmetric saliency-based auto-encoder without saliency first')
+        generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline_v2/Best_G.pth'%(args.dataset, args.target)))
+        # try:
+        #     generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline/Best_G.pth'%(args.dataset, args.target)))
+        # except:
+        #     print('../logs/classification/%s_%s_baseline/Best_G.pth not exist'%(args.dataset, args.target))
+        #     print('You must train the symmetric saliency-based auto-encoder without saliency first')
+    # generator = nn.DataParallel(generator)
     num_classes = {
         'imagenette': 10,
         'cifar10': 10,
@@ -148,7 +151,7 @@ if __name__ == '__main__':
         # test
         acc, all_raw_imgs, all_adv_imgs = evaluate(test_loader, target_model, generator, logs, delta, use_saliency_map=args.saliency, mean=cfg['mean'], std=cfg['std'])
         logger.write(' Mode: {} | Target dataset: {} | Target model: {}| Epoch: {} | Accuracy: {:2f} |\n'.format(mode, args.dataset, args.target, epoch, acc))
-        torch.save(generator.state_dict(), '%s/Best_G.pth'%(logs))
+        torch.save(generator.module.state_dict(), '%s/Best_G.pth'%(logs))
 
         for s in stats:
             logger.write('%s: %.3f |'%(s, meters_trn[s].avg))

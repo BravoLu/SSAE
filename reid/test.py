@@ -26,7 +26,7 @@ def test(opt):
     # print(cfg)
     query_loader = DataLoader(
         Preprocessor(dataset.query, training=False, transform=cfg['transform_test']),
-        batch_size=16,
+        batch_size=8,
         shuffle=False,
         num_workers=4,
         pin_memory=True

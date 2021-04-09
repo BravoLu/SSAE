@@ -5,7 +5,7 @@ dataset=imagenette
 #target=mobilenet
 target=resnet
 dir='~/shaohao/data'
-gpu=2
-echo python test.py --dataset ${dataset} --target ${target} --gpu ${gpu} --dir ${dir} 
-python test.py --dataset ${dataset} --target ${target} --gpu ${gpu} --dir ${dir} 
+gpu=0
+echo python test.py --dataset ${dataset} --target ${target} --gpu ${gpu} --dir ${dir} --saliency 
+python test.py --dataset ${dataset} --target ${target} --gpu ${gpu} --dir ${dir} --saliency
   

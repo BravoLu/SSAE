@@ -73,7 +73,7 @@ def get_adv_query_feats(model, generator, query_loader, logs, delta):
             perturbations, saliency_map = generator(raw_img)#.data.cpu()
         perturbations = perturbations.detach().cpu()
         saliency_map = saliency_map.detach().cpu()
-        adv_img = raw_img.cpu() + batch_clamp(delta, perturbations)
+        adv_img = raw_img.cpu() + batch_clamp(delta, perturbations) * saliency_map
 
         raw_imgs.append(raw_img.cpu())
         adv_imgs.append(adv_img.cpu())
@@ -89,13 +89,22 @@ def get_adv_query_feats(model, generator, query_loader, logs, delta):
             query_adv_features[fname] = feat
             query_labels[fname] = vid.item()
 
-        if idx == 0:
-            save_image(saliency_map[0], '%s/mask.jpg'%logs)
+        if idx < 10:
+            save_image(saliency_map, '%s/mask_%d.jpg'%(logs,idx))
+            ori_imgs = torch.cat([raw_img], dim=0)
             vis_imgs = torch.cat([adv_img], dim=0)
+            delta_imgs = torch.cat([perturbations], dim=0)
+            delta_imgs_with_saliency = torch.cat([perturbations * saliency_map], dim=0)
+            tensor2img(delta_imgs_with_saliency, mean=mean, std=std)
+            save_image(delta_imgs_with_saliency, '%s/delta_%d_with_saliency.jpg'%(logs, idx))
+            tensor2img(delta_imgs, mean=mean, std=std)
+            save_image(delta_imgs, '%s/delta_%d.jpg'%(logs, idx))
             tensor2img(vis_imgs, mean=mean, std=std)
-            save_image(vis_imgs[0], '%s/perturbed.jpg'%logs)
-            # save_imgs(vis_imgs[0], '%s/perturbed.jpg'%(logs))
+            save_image(vis_imgs, '%s/perturbed_%d.jpg'%(logs, idx))
+            tensor2img(ori_imgs, mean=mean, std=std)
+            save_image(ori_imgs, '%s/origin_%d.jpg'%(logs, idx))
 
+    
     raw_imgs = torch.cat(raw_imgs, dim=0)
     adv_imgs = torch.cat(adv_imgs, dim=0)
 

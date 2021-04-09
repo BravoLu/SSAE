@@ -32,8 +32,8 @@ def test(opt):
 
     test_loader = DataLoader(
         testset,
-        batch_size=1,
-        shuffle=False,
+        batch_size=4,
+        shuffle=True,
         num_workers=4,
         pin_memory=True
     )
@@ -42,6 +42,10 @@ def test(opt):
     generator = globals()[opt.net]().cuda()
     generator = torch.nn.DataParallel(generator)
     generator.load_state_dict(torch.load(generator_weights))
+    # generator.load_state_dict(torch.load(generator_weights))
+    # generator = torch.nn.DataParallel(generator)
+    # torch.save(generator.module.state_dict(), 'attacker.pth')
+    print("save successfully!")
     num_classes = {
         'imagenette': 10,
         'cifar10': 10,

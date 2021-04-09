@@ -6,4 +6,4 @@ targets/*
 classification/checkpoint/*
 vis/*
 classification/target/*
-reid/target/*
+reid/targets/*
