@@ -96,5 +96,13 @@ class GoogLeNet(nn.Module):
         out = self.avgpool(out)
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        return feat,out
+        # return feat,out
+        return out
 
+def test():
+    net = GoogLeNet()
+    x = torch.randn(1,3,32,32)
+    y = net(x)
+    print(y.size())
+
+# test()

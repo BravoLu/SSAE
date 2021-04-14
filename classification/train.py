@@ -24,13 +24,13 @@ from models import *
 from transforms import *
 # from mask import GradCam
 
-EPOCHS = 40
+EPOCHS = 20
 delta = 0.1
-alpha = 0.0001
+alpha = 0.00001
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser('Adversarial Attack In Classification Task.')
-    parser.add_argument('--dataset', type=str, default='cifar10', choices=('cifar10', 'imagenette', 'cifar100'))
+    parser.add_argument('--dataset', type=str, default='cifar10', choices=('cifar10', 'imagenette', 'cifar100', 'caltech101'))
     parser.add_argument('--target', type=str, default='resnet', choices=('efficientnet', 'densenet', 'resnet', 'vgg', 'googlenet', 'mobilenet'))
     parser.add_argument('--ckpt', type=str, default='../targets/classification/Baseline_cifar10.pth')
     parser.add_argument('--gpu', type=str, default='3,7')
@@ -57,17 +57,21 @@ if __name__ == '__main__':
     elif args.dataset == 'imagenette':
         trainset = ImageFolder(os.path.join(args.dir, 'imagenette2/train'), transform=cfg['transform_train'])
         testset = ImageFolder(os.path.join(args.dir, 'imagenette2/val'), transform=cfg['transform_test'])
+    elif args.dataset == 'caltech101':
+        trainset = ImageFolder(os.path.join(args.dir, 'Caltech101/train'), transform=cfg['transform_train'])
+        testset = ImageFolder(os.path.join(args.dir, 'Caltech101/test'), transform=cfg['transform_test'])
+
 
     train_loader = DataLoader(
         trainset,
-        batch_size=16,
+        batch_size=2,
         shuffle=True,
         num_workers=4,
         pin_memory=True
     )
     test_loader = DataLoader(
         testset,
-        batch_size=32,
+        batch_size=8,
         shuffle=False,
         num_workers=4,
         pin_memory=True
@@ -78,18 +82,18 @@ if __name__ == '__main__':
     generator = globals()[args.net]().to(device)
     generator = nn.DataParallel(generator)
     if args.saliency:
-        EPOCHS = 150
-        generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline_v2/Best_G.pth'%(args.dataset, args.target)))
-        # try:
-        #     generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline/Best_G.pth'%(args.dataset, args.target)))
-        # except:
-        #     print('../logs/classification/%s_%s_baseline/Best_G.pth not exist'%(args.dataset, args.target))
-        #     print('You must train the symmetric saliency-based auto-encoder without saliency first')
+        # generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline/Best_G.pth'%(args.dataset, args.target)))
+        try:
+            generator.load_state_dict(torch.load('../logs/classification/%s_%s_baseline/Best_G.pth'%(args.dataset, args.target)))
+        except:
+            print('../logs/classification/%s_%s_baseline/Best_G.pth not exist'%(args.dataset, args.target))
+            print('You must train the symmetric saliency-based auto-encoder without saliency first')
     # generator = nn.DataParallel(generator)
     num_classes = {
         'imagenette': 10,
         'cifar10': 10,
-        'cifar100': 100
+        'cifar100': 100,
+        'caltech101': 101
     }
     target_model = init_model(args.target, args.ckpt, num_classes=num_classes[args.dataset])
     target_model = nn.DataParallel(target_model).to(device)
@@ -135,7 +139,7 @@ if __name__ == '__main__':
             if args.saliency:
                 norm_loss = mse_loss(raw_norms, adv_norms)
                 frobenius_loss = torch.norm(saliency_map, dim=(1,2)).sum()
-                #loss += alpha * (norm_loss + frobenius_loss)
+                loss += alpha * (norm_loss + frobenius_loss)
                 if torch.isnan(frobenius_loss):
                     print("there are nans in frobenius loss")
                     break

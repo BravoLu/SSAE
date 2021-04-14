@@ -145,8 +145,8 @@ class EfficientNet(nn.Module):
         out = F.adaptive_avg_pool2d(out, 1)
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        return feat,out
-
+        # return feat,out
+        return out
 
 def EfficientNetB0():
     cfg = {
@@ -158,7 +158,7 @@ def EfficientNetB0():
         'dropout_rate': 0.2,
         'drop_connect_rate': 0.2,
     }
-    return EfficientNet(cfg)
+    return EfficientNet(cfg, num_classes=101)
 
 
 def test():

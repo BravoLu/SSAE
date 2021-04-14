@@ -34,7 +34,7 @@ class Transition(nn.Module):
 
 
 class DenseNet(nn.Module):
-    def __init__(self, block, nblocks, growth_rate=12, reduction=0.5, num_classes=10):
+    def __init__(self, block, nblocks, growth_rate=12, reduction=0.5, num_classes=101):
         super(DenseNet, self).__init__()
         self.growth_rate = growth_rate
 
@@ -82,23 +82,10 @@ class DenseNet(nn.Module):
         out = self.gap(F.relu(self.bn(out)))
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        #return feat, out
-        return out
+        return feat, out
 
-def DenseNet121():
-    return DenseNet(Bottleneck, [6,12,24,16], growth_rate=32)
-
-def DenseNet169():
-    return DenseNet(Bottleneck, [6,12,32,32], growth_rate=32)
-
-def DenseNet201():
-    return DenseNet(Bottleneck, [6,12,48,32], growth_rate=32)
-
-def DenseNet161():
-    return DenseNet(Bottleneck, [6,12,36,24], growth_rate=48)
-
-def densenet_cifar():
-    return DenseNet(Bottleneck, [6,12,24,16], growth_rate=12)
+def DenseNet121(num_classes):
+    return DenseNet(Bottleneck, [6,12,24,16], growth_rate=32, num_classes=num_classes)
 
 def test():
     net = densenet_cifar()

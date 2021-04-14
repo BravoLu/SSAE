@@ -41,17 +41,19 @@ if not os.path.exists(models_path):
 targeted_model = targeted_model.cuda()
 targeted_model = nn.DataParallel(targeted_model)
 targeted_model.eval()
-model_num_labels = 10
+model_num_labels = 101
 cfg = get_opts(data_name)
 # MNIST train dataset and dataloader declaration
 if data_name == 'cifar10':
     trainset = torchvision.datasets.CIFAR10(root=os.path.join(args.dir, 'data/cifar10', train=True, transform=cfg['transform_train'], download=True))
-else:
+elif data_name == 'imagenette':
     trainset = ImageFolder(os.path.join(args.dir, 'imagenette2/train'), transform=cfg['transform_train'])
+elif data_name == 'caltech101':
+    trainset = ImageFolder(os.path.join(args.dir, 'Caltech101/train'), transform=cfg['transform_train'])
 
 train_loader = DataLoader(
         trainset,
-        batch_size=8,
+        batch_size=4,
         shuffle=True,
         num_workers=4,
         pin_memory=True

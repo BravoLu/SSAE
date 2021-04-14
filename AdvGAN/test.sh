@@ -1,4 +1,3 @@
-MODEL=resnet
-DATA=imagenette
-DATA_DIR='../data'
+# DATA=imagenette
+DATA_DIR='/user/lintao/shaohao/data/'
 python test.py --dir $DATA_DIR

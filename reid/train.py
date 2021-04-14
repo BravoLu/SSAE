@@ -94,9 +94,7 @@ def get_adv_query_feats(model, generator, query_loader, logs, delta):
             ori_imgs = torch.cat([raw_img], dim=0)
             vis_imgs = torch.cat([adv_img], dim=0)
             delta_imgs = torch.cat([perturbations], dim=0)
-            delta_imgs_with_saliency = torch.cat([perturbations * saliency_map], dim=0)
-            tensor2img(delta_imgs_with_saliency, mean=mean, std=std)
-            save_image(delta_imgs_with_saliency, '%s/delta_%d_with_saliency.jpg'%(logs, idx))
+            delta_imgs_with_saliency = torch.cat([], dim=0)
             tensor2img(delta_imgs, mean=mean, std=std)
             save_image(delta_imgs, '%s/delta_%d.jpg'%(logs, idx))
             tensor2img(vis_imgs, mean=mean, std=std)
@@ -133,7 +131,7 @@ if __name__ == '__main__':
     cfg = get_opts(args.target)
     train_loader = DataLoader(
         Preprocessor(dataset.train, training=True, transform=cfg['transform_train']),
-        batch_size=32,
+        batch_size=4,
         shuffle=True,
         num_workers=4,
         pin_memory=True

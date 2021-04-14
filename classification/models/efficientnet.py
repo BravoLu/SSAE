@@ -105,7 +105,7 @@ class Block(nn.Module):
 
 
 class EfficientNet(nn.Module):
-    def __init__(self, cfg, num_classes=100):
+    def __init__(self, cfg, num_classes=101):
         super(EfficientNet, self).__init__()
         self.cfg = cfg
         self.conv1 = nn.Conv2d(3,
@@ -145,8 +145,8 @@ class EfficientNet(nn.Module):
         out = F.adaptive_avg_pool2d(out, 1)
         feat = out.view(out.size(0), -1)
         out = self.linear(feat)
-        return feat,out
-        #return out
+        # return feat,out
+        return out
 
 def EfficientNetB0(num_classes):
     cfg = {
@@ -160,13 +160,3 @@ def EfficientNetB0(num_classes):
     }
     return EfficientNet(cfg, num_classes=num_classes)
 
-
-def test():
-    net = EfficientNetB0()
-    x = torch.randn(2, 3, 32, 32)
-    y = net(x)
-    print(y.shape)
-
-
-if __name__ == '__main__':
-    test()

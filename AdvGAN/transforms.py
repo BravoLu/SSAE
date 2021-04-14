@@ -22,6 +22,11 @@ def get_opts(name):
         base_opt['std'] = cifar_stddev 
         base_opt['transform_train'] = T.Compose([T.Resize((224, 224)), T.ToTensor(), T.Normalize(mean=base_opt['mean'], std=base_opt['std'])]) 
         base_opt['transform_test'] = T.Compose([T.Resize((224, 224)), T.ToTensor(), T.Normalize(mean=base_opt['mean'], std=base_opt['std'])]) 
+    elif name == 'caltech101':
+        base_opt['mean'] = cifar_mean
+        base_opt['std'] = cifar_stddev 
+        base_opt['transform_train'] = T.Compose([T.Resize((224, 224)), T.ToTensor(), T.Normalize(mean=base_opt['mean'], std=base_opt['std'])]) 
+        base_opt['transform_test'] = T.Compose([T.Resize((224, 224)), T.ToTensor(), T.Normalize(mean=base_opt['mean'], std=base_opt['std'])]) 
 
 
     return base_opt 
