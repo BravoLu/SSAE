@@ -22,8 +22,8 @@
 ```latex
 @inproceedings{lu2021s,
   title={Discriminator-Free Generative Adversarial Attack},
-  author={Shaohao Lu, Yuqiao Xian, Ke Yan, Yi Hu, Xing Sun, Xiaowei Guo, Feiyue Huang, Wei-Shi Zheng},
-  booktitle={Proceedings of the 29th ACM International Conference on Multimedia},
+  author={Shaohao Lu, Yuqiao Xian, Ke Yan, Yi Hu, Xing Sun, Xiaowei Guo, FeiyueHuang, and Wei-Shi Zheng},
+  booktitle={In Proceedings of the 29th ACM International Conference onMultimedia (MM ’21)},
   year={2021}
 }
 ```
